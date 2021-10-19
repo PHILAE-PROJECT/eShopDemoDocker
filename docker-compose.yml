@@ -1,0 +1,28 @@
+version: '3'
+
+networks:
+  default:
+    driver: bridge
+
+services:
+  web:
+    image: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./www:/var/www/
+      - ./sites:/etc/nginx/conf.d
+
+  php:
+    build:
+      context: ./php-img
+    volumes:
+      - ./www:/var/www/
+
+  mariadb:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: 2philaEshop5
+      MYSQL_DATABASE: opencart
+    volumes:
+      - ./sql/dump.sql:/docker-entrypoint-initdb.d/dump.sql
