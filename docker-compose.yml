@@ -5,20 +5,6 @@ networks:
     driver: bridge
 
 services:
-  web:
-    image: nginx
-    ports:
-      - "8080:80"
-    volumes:
-      - ./www:/var/www/
-      - ./sites:/etc/nginx/conf.d
-
-  php:
-    build:
-      context: ./php-img
-    volumes:
-      - ./www:/var/www/
-
   mariadb:
     image: mariadb
     environment:
@@ -26,3 +12,30 @@ services:
       MYSQL_DATABASE: opencart
     volumes:
       - ./sql/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+    restart: always
+  
+  php:
+    build:
+      context: ./php-img
+    volumes:
+      - ./www:/var/www/
+      - ./php-img/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    restart: always
+
+  composer:
+    restart: 'no'
+    image: composer/composer
+    command: install
+    volumes:
+      - ./www/html/opencart:/app/
+  
+  web:
+    image: nginx
+    ports:
+      - "8080:80"
+    depends_on:
+      - "mariadb"
+      - "php"
+    volumes:
+      - ./www:/var/www/
+      - ./sites:/etc/nginx/conf.d
