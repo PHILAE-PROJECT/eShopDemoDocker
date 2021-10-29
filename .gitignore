@@ -1,1 +1,7 @@
 .idea/
+www/storage/cache/*
+www/storage/session/*
+www/storage/download/*
+www/storage/modification/*
+www/storage/upload/*
+www/storage/vendor/*
