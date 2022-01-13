@@ -32,10 +32,19 @@ If you want to use another port, open file *docker-compose.yml*, go to line 11 "
  
 The URL of the admin panel is http://localhost:8080/admin
 
-Logs
+Server Logs
 ----
 
-Logs (user traces) are collected in file www/storage/logs/OpenCartAction.txt
+Server-side logs (user action traces) are collected in file www/storage/logs/OpenCartAction.txt 
+
+Client Logs (AIFEX)
+----
+
+If you want to collect user traces from the client's point of view, create an account on <www.aifex.fr> and start a new AIFEX session. Obtain the sessionId and modelId of your session, and insert the following script in the `<head>` tag of file /var/www/html/opencart/catalog/view/theme/default/template/common/header.twig:
+```
+<script id="AIFEX" connexion-url="https://www.aifex.fr/join?sessionId=######&modelId=#####" src="https://www.aifex.fr/static/AIFEXScript.js" defer=""></script>
+```
+Make sure to replace the two # placeholders in the URL by your sessionId and modelId. 
 
 Code Coverage
 -------------
@@ -44,7 +53,7 @@ Code coverage can be enabled by creating the containers with the following comma
 `$ make up-cov`  
 Coverage is collected per request by default. After each request, a json file is created in www/html/opencart/codecoverage/coverages and lists, per file, both uncovered lines (value 0) and covered lines (value 1).  
 It is possible to merge request coverages by first setting the cookie variable `test-name` to a name of your choosing, then once all requests have been issued, by running:  
-`$ make agg-cov #` *Note that the first time that this command is executed, a Docker image is first created.*  
+`$ make agg-cov` *Note that the first time that this command is executed, a Docker image is first created.*  
 The aggregated coverage file (stored at location www/html/opencart/codecoverage/coverages/aggregated) has a slightly different format: for each executed file, it only lists the covered lines, and for each covered line, it mentions which request(s) covered it.  
 **Beware** Code coverage files can quickly accumulate and take up a lot of storage space, especially when you don't aggregate the coverage files on a regular basis. To clean all the per-request coverage files, run:  
 `$ make clean`
