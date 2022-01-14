@@ -1,7 +1,7 @@
 Philae e-shop
 =============
 
-This archive contains the necessary components to run Philae's opencart instance called **e-shop** using Docker.
+This repository contains the necessary components to run Philae's **e-shop** application using Docker. e-shop is an open-cart instance with a fake catalog that has been modified to collect server-side logs as well as per-request code coverage. It is also possible to collect client-side logs by adding an AIFEX script.
 
 Preliminaries
 -------------
